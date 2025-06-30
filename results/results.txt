@@ -1,0 +1,10 @@
+Model: whisper_cpp_small, Speed: 1.0x, Transcript:  And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.
+
+Model: whisper_cpp_small, Speed: 1.5x, Transcript:  And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.
+
+Model: whisper_cpp_small, Speed: 2.0x, Transcript:  And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.
+
+Model: whisper_cpp_small, Speed: 2.5x, Transcript:  And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.
+
+Model: whisper_cpp_small, Speed: 3.0x, Transcript:  And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.
+

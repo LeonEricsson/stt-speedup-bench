@@ -1,0 +1,11 @@
+[project]
+name = "stt-speedup"
+version = "0.1.0"
+description = "Evaluating STT models with sped-up audio."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "openai>=1.93.0",
+    "requests>=2.32.4",
+    "tqdm>=4.67.1",
+]
