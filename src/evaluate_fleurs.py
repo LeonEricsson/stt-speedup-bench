@@ -169,7 +169,7 @@ def main():
     with out_file.open("w", newline="") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["language", "speedup", "wer", "cer"],
+            fieldnames=["language", "speedup", "n_utts", "wer_micro", "cer_micro", "wer_macro", "cer_macro"],   
         )
         writer.writeheader()
         for lang in LANGUAGES:
