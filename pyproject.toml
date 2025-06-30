@@ -15,4 +15,6 @@ dependencies = [
     "accelerate>=1.8.1",
     "librosa>=0.11.0",
     "torchaudio>=2.7.1",
+    "jiwer>=4.0.0",
+    "evaluate>=0.4.4",
 ]

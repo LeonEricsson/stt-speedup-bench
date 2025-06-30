@@ -4,21 +4,14 @@ import openai
 import subprocess
 from abc import ABC, abstractmethod
 from dotenv import load_dotenv
-
+from typing import List
 
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 
 load_dotenv()
 
-
-class STTModel(ABC):
-    @abstractmethod
-    def transcribe(self, audio_path: str) -> str:
-        pass
-
-
-class WhisperCPP(STTModel):
+class WhisperCPP():
     def __init__(self, host: str = "127.0.0.1", port: int = 8080):
         self.url = f"http://{host}:{port}/inference"
 
@@ -30,7 +23,7 @@ class WhisperCPP(STTModel):
             return response.json()["text"]
 
 
-class OpenAIAPI(STTModel):
+class OpenAIAPI():
     def __init__(self, model: str = "whisper-1", api_key: str | None = None):
         self.model = model
         self.client = openai.OpenAI(
@@ -46,7 +39,7 @@ class OpenAIAPI(STTModel):
         return transcript.text
 
 
-class TransformersWhisper(STTModel):
+class TransformersWhisper():
     def __init__(
         self,
         model_id: str = "openai/whisper-large-v3-turbo",
@@ -87,23 +80,20 @@ class TransformersWhisper(STTModel):
         # optional decoding/generation tweaks
         self.generate_kwargs = generate_kwargs or {
             # you can override these defaults when calling transcribe()
-            "max_new_tokens": 448,
-            "condition_on_prev_tokens": False,
-            "compression_ratio_threshold": 1.35,
-            "no_speech_threshold": 0.6,
+            "max_new_tokens": 440,
         }
 
-    def transcribe(self, audio_path: str, **override_generate_kwargs) -> str:
+    def transcribe(self, audios: List, **override_generate_kwargs) -> str:
         """
-        Transcribe an audio file.
-        :param audio_path: path to local audio file
+        Transcribe audio batch
+        :param audio_path: batch of audio arrays
         :param override_generate_kwargs: any generate_kwargs to override defaults
         :returns: transcript text
         """
         # merge defaults with overrides
         gen_kwargs = {**self.generate_kwargs, **override_generate_kwargs}
-        result = self.pipe(audio_path, generate_kwargs=gen_kwargs)
-        return result["text"]
+        preds = self.pipe(audios, generate_kwargs=gen_kwargs)
+        return [p["text"] for p in preds]
 
 
 def apply_speedup_and_silence_removal(input_path: str, output_path: str, speed: float):
