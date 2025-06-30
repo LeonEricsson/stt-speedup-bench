@@ -8,7 +8,10 @@ wheels/
 
 .env
 
+whisper.cpp
+data
+
 # Virtual environments
 .venv
 
-whisper.cpp
+

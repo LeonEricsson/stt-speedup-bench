@@ -3,9 +3,15 @@ name = "stt-speedup"
 version = "0.1.0"
 description = "Evaluating STT models with sped-up audio."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
     "openai>=1.93.0",
     "requests>=2.32.4",
     "tqdm>=4.67.1",
+    "python-dotenv>=1.0.0",
+    "datasets>=3.6.0",
+    "soundfile>=0.13.1",
+    "transformers>=4.53.0",
+    "accelerate>=1.8.1",
+    "librosa>=0.11.0",
 ]

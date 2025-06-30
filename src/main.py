@@ -7,6 +7,9 @@ def main():
     # --- Configuration ---
     models_to_test = {
         "whisper_cpp_small": WhisperCPP(),
+        "openai_whisper_1": OpenAIAPI(model="whisper-1"),
+        "openai_gpt_4o": OpenAIAPI(model="gpt-4o-transcribe"),
+        "openai_gpt_4o_mini": OpenAIAPI(model="gpt-4o-mini-transcribe"),
     }
     speedup_factors = [1.0, 1.5, 2.0, 2.5, 3.0]
     data_dir = "data"
@@ -43,6 +46,7 @@ def main():
 
                 except Exception as e:
                     print(f"Error with model {model_name} at speed {speed}: {e}")
+
 
 if __name__ == "__main__":
     main()
