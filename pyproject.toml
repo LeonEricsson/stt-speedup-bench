@@ -9,9 +9,10 @@ dependencies = [
     "requests>=2.32.4",
     "tqdm>=4.67.1",
     "python-dotenv>=1.0.0",
-    "datasets>=3.6.0",
+    "datasets[audio]>=3.6.0",
     "soundfile>=0.13.1",
     "transformers>=4.53.0",
     "accelerate>=1.8.1",
     "librosa>=0.11.0",
+    "torchaudio>=2.7.1",
 ]
