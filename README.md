@@ -6,20 +6,26 @@ The core idea is to take a standard speech-to-text (STT) evaluation set, create 
 
 ## Experiment
 
-## Experiment
-
 Initial experiments were conducted on the Whisper model family. The FLEURS dataset was chosen for evaluation, specifically the test sets in English, Spanish, and Swedish to assess robustness across a small variety of languages. The evaluation metrics used were Word Error Rate (WER) and Character Error Rate (CER), calculated using [jiwer](https://github.com/jitsi/jiwer). The tested speedup factors were: 1.0, 1.5, 2.0, 2.5, and 3.0.
 
 An overview of the results is presented in the figure below.
 
 <p align="center">
-  <img src="/results/error_rate_speedup.png" alt="Error Rate vs Speedup" width="65%">
+  <img src="/results/assets/error_rate_speedup.png" alt="Error Rate vs Speedup" width="65%">
 </p>
 
 <p align="center">
   <em>The error rate across three languages in the FLEURS test set for increasing speedup factors. Error rates are averaged across language.</em>
 </p>
 
+The detailed results are given here.
+<p align="center">
+  <img src="/results/assets/whisper-large-v3-turbo-table.png" width="30%" style="margin: 0 10px;">
+  <img src="/results/assets/whisper-medium-table.png" width="30%" style="margin: 0 10px;">
+  <img src="/results/assets/whisper-small-table.png" width="30%" style="margin: 0 10px;">
+</p>
+
+Following this we conduct further experiments with a finer speedup factors around 1.0 - 1.6. 
 
 ## Recreating the results
 
