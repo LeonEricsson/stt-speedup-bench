@@ -9,7 +9,7 @@ Leveraging the FLEURS dataset as a controlled evaluation benchmark, the analysis
 Transcription accuracy exhibits exponential degradation under increasing speed up, with performance blowing up quickly as you go beyond 1.5x. 
 
 <p align="center">
-  <img src="results/assets/tldr.png" alt="Error Rate vs Speedup" width="64%">
+  <img src="results/assets/tldr.png" alt="Error Rate vs Speedup" width="70%">
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@ Experiments targeted the Whisper-model family (small, medium, and large-v3-turbo
 Results summary:
 
 <p align="center">
-  <img src="results/assets/error_rate_speedup-1.png" alt="Error Rate vs Speedup" width="65%">
+  <img src="results/assets/error_rate_speedup-1.png" alt="Error Rate vs Speedup" width="71%">
 </p>
 
 ---
