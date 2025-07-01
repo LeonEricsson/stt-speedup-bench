@@ -19,9 +19,9 @@ mpl.rcParams.update(
 )
 
 DATA_FILES = {
-    "Whisper Large-v3 Turbo": "results/whisper-large-v3-turbo.csv",
-    "Whisper Medium": "results/whisper-medium.csv",
-    "Whisper Small": "results/whisper-small.csv",
+    "Whisper Large-v3 Turbo": "results/whisper-large-v3-turbo-fine.csv",
+    "Whisper Medium": "results/whisper-medium-fine.csv",
+    "Whisper Small": "results/whisper-small-fine.csv",
 }
 
 # colour-blind-friendly palette → one colour per model
