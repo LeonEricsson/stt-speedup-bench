@@ -6,28 +6,45 @@ The core idea is to take a standard speech-to-text (STT) evaluation set, create 
 
 ## Experiment
 
+
+### Initial experiments
 Initial experiments were conducted on the Whisper model family. The FLEURS dataset was chosen for evaluation, specifically the test sets in English, Spanish, and Swedish to assess robustness across a small variety of languages. The evaluation metrics used were Word Error Rate (WER) and Character Error Rate (CER), calculated using [jiwer](https://github.com/jitsi/jiwer). The tested speedup factors were: 1.0, 1.5, 2.0, 2.5, and 3.0.
 
 An overview of the results is presented in the figure below.
 
 <p align="center">
-  <img src="/results/assets/error_rate_speedup.png" alt="Error Rate vs Speedup" width="65%">
+  <img src="/results/assets/error_rate_speedup-1.png" alt="Error Rate vs Speedup" width="65%">
 </p>
 
 <p align="center">
-  <em>The error rate across three languages in the FLEURS test set for increasing speedup factors. Error rates are averaged across language.</em>
+  <em>The error rate across three languages in the FLEURS test set, at increasing speedup factors. Error rates are averaged across language.</em>
 </p>
 
 ---
 
 The detailed results are given in tables below.
 <p align="center">
-  <img src="/results/assets/whisper-large-v3-turbo-table.png" width="30%">
-  <img src="/results/assets/whisper-medium-table.png" width="30%">
-  <img src="/results/assets/whisper-small-table.png" width="30%">
+  <img src="/results/assets/whisper-large-v3-turbo.png" width="30%">
+  <img src="/results/assets/whisper-medium.png" width="30%">
+  <img src="/results/assets/whisper-small.png" width="30%">
 </p>
 
-Following this we conduct further experiments with a finer speedup factors around 1.0 - 1.6. 
+### Finer resolution
+Given the exponential nature of the error rate I conduct more fine grained experiments around speedup factors 1.0 - 1.6. Otherwise the experiment is held the same (FLEURS test set, evaluation metrics, languages, ...).
+
+<p align="center">
+  <img src="/results/assets/error_rate_speedup-fine.png" alt="Error Rate vs Speedup" width="65%">
+</p>
+
+---
+
+The detailed results are given in tables below.
+<p align="center">
+  <img src="/results/assets/whisper-large-v3-turbo-fine.png" width="30%">
+  <img src="/results/assets/whisper-medium-fine.png" width="30%">
+  <img src="/results/assets/whisper-small-fine.png" width="30%">
+</p>
+
 
 ## Recreating the results
 

@@ -22,6 +22,7 @@ DATA_FILES = {
     "Whisper Large-v3 Turbo": "results/whisper-large-v3-turbo-fine.csv",
     "Whisper Medium": "results/whisper-medium-fine.csv",
     "Whisper Small": "results/whisper-small-fine.csv",
+    # "GPT-4o Transcribe": "results/gpt-4o-transcribe-fine.csv",
 }
 
 # colour-blind-friendly palette → one colour per model
@@ -29,6 +30,7 @@ MODEL_COLOURS = {
     "Whisper Large-v3 Turbo": "#66C2A5",  # teal
     "Whisper Medium": "#FC8D62",  # salmon
     "Whisper Small": "#8DA0CB",  # lavender
+    # "GPT-4o Transcribe": "#CC79A7",  # lavender
 }
 METRIC_STYLE = {"wer_macro": "solid", "cer_macro": "dashed"}
 
@@ -37,7 +39,7 @@ METRIC_STYLE = {"wer_macro": "solid", "cer_macro": "dashed"}
 agg = {}
 for model, path in DATA_FILES.items():
     df = pd.read_csv(path)
-    df = df[df["speedup"] != 3.0]
+    df = df[df["speedup"] != 2.0]
     df_mean = df.groupby("speedup")[["wer_macro", "cer_macro"]].mean().sort_index()
     df_mean *= 100
     agg[model] = df_mean
@@ -52,7 +54,7 @@ for model, df in agg.items():
 
 # axes & grid
 ax.set_xlabel("Playback Speed Factor")
-ax.set_ylabel("Error Rate (\%)")
+ax.set_ylabel("Error Rate (\%)", labelpad=10)
 ax.set_xticks(df.index)
 ax.grid(True, which="both", linestyle="--", linewidth=0.5, alpha=0.7)
 
@@ -69,7 +71,7 @@ leg_models = ax.legend(
     title="Model",
     frameon=False,
     loc="upper left",  # anchor point is the *corner* chosen by 'loc'
-    bbox_to_anchor=(0.05, 0.94),  # (x, y) in axes fraction units
+    bbox_to_anchor=(0.05, 0.945),  # (x, y) in axes fraction units
     borderpad=0.2,
 )
 
@@ -79,7 +81,7 @@ leg_metrics = ax.legend(
     title="Metric",
     frameon=False,
     loc="upper left",
-    bbox_to_anchor=(0.11, 0.76),  # adjust y until it looks right
+    bbox_to_anchor=(0.11, 0.78),  # adjust y until it looks right
     borderpad=0.2,
 )
 
