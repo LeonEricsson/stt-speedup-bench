@@ -18,11 +18,13 @@ An overview of the results is presented in the figure below.
   <em>The error rate across three languages in the FLEURS test set for increasing speedup factors. Error rates are averaged across language.</em>
 </p>
 
-The detailed results are given here.
+---
+
+The detailed results are given in tables below.
 <p align="center">
-  <img src="/results/assets/whisper-large-v3-turbo-table.png" width="30%" style="margin: 0 10px;">
-  <img src="/results/assets/whisper-medium-table.png" width="30%" style="margin: 0 10px;">
-  <img src="/results/assets/whisper-small-table.png" width="30%" style="margin: 0 10px;">
+  <img src="/results/assets/whisper-large-v3-turbo-table.png" width="30%">
+  <img src="/results/assets/whisper-medium-table.png" width="30%">
+  <img src="/results/assets/whisper-small-table.png" width="30%">
 </p>
 
 Following this we conduct further experiments with a finer speedup factors around 1.0 - 1.6. 
