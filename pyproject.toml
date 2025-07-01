@@ -17,4 +17,6 @@ dependencies = [
     "torchaudio>=2.7.1",
     "jiwer>=4.0.0",
     "evaluate>=0.4.4",
+    "matplotlib>=3.10.3",
+    "pyqt5>=5.15.11",
 ]

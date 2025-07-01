@@ -20,10 +20,10 @@ from datasets import load_from_disk, Audio, Dataset
 
 # --------------------------- configuration ----------------------------------
 IN_DIR = Path("data/fleurs")  # original test splits
-OUT_DIR = Path("data/fleurs_preprocessed")  # final destination
+OUT_DIR = Path("data/fleurs_preprocessed_fine")  # final destination
 LANGS = ["en_us", "es_419", "sv_se"]  # language IDs
 MAX_SECONDS = 25.0  # duration ceiling
-SPEEDUPS = [1.0, 1.5, 2.0, 2.5, 3.0]  # tempo factors
+SPEEDUPS = [1.2, 1.4, 1.6]  # tempo factors
 SEED = 42  # reproducibility
 NUM_PROC = 4  # parallel workers
 # ----------------------------------------------------------------------------

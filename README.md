@@ -1,84 +1,86 @@
-# STT Speedup Evaluation
+# Does audio speedup affect speech recognition?
 
-This project evaluates the performance of various speech-to-text (STT) models when the input audio is sped up by different factors.
+This project contains code for running experiments on the robustness of (popular) speech-recognition models to sped-up audio. 
 
-## Project Goal
+The core idea is to take a standard speech-to-text (STT) evaluation set, create copies of it at various speed factors, and then measure the degradation in transcription accuracy (WER/CER).
 
-The primary goal is to measure how the accuracy of STT models, such as Whisper and OpenAI's models, is affected by increasing the speed of the input audio. This is achieved by programmatically speeding up audio files from an evaluation dataset and comparing the transcription results against the ground truth.
+## Experiment
 
-## Features
+## Experiment
 
-*   **Audio Speed-up:** Utilizes `ffmpeg` to apply the `atempo` filter for speeding up audio files.
-*   **Silence Removal:** Uses `ffmpeg`'s `silenceremove` filter to remove silences from the audio, which can also affect STT performance.
-*   **Multi-model Evaluation:** Supports evaluating different STT models:
-    *   **Whisper:** Runs locally using `whisper.cpp` as a server.
-    *   **OpenAI API:** Interacts with OpenAI's transcription API (e.g., for `whisper-4o`).
-*   **Extensible:** The project is designed to be easily extendable to include other STT models and evaluation datasets.
+Initial experiments were conducted on the Whisper model family. The FLEURS dataset was chosen for evaluation, specifically the test sets in English, Spanish, and Swedish to assess robustness across a small variety of languages. The evaluation metrics used were Word Error Rate (WER) and Character Error Rate (CER), calculated using [jiwer](https://github.com/jitsi/jiwer). The tested speedup factors were: 1.0, 1.5, 2.0, 2.5, and 3.0.
 
-## Getting Started
+An overview of the results is presented in the figure below.
 
-### Prerequisites
+<p align="center">
+  <img src="/results/error_rate_speedup.png" alt="Error Rate vs Speedup" width="65%">
+</p>
 
-*   Python 3.8+
-*   `ffmpeg`
-*   An OpenAI API key (if using OpenAI models)
-*   `whisper.cpp` (for running Whisper models locally)
+<p align="center">
+  <em>The error rate across three languages in the FLEURS test set for increasing speedup factors. Error rates are averaged across language.</em>
+</p>
 
-### Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    cd stt-speedup
-    ```
+## Recreating the results
 
-2.  **Install Python dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+### 1. Set up the environment
 
-3.  **Set up `whisper.cpp`:**
-    Follow the instructions in the [whisper.cpp repository](https://github.com/ggerganov/whisper.cpp) to build and run the server.
+This project uses `uv` for package management.
 
-### Usage
-
-1.  **Prepare your evaluation dataset:**
-    Place your audio files in the `data/` directory.
-
-2.  **Run the evaluation:**
-    ```bash
-    python main.py
-    ```
-
-    The script will process the audio files, send them to the configured STT models, and save the results in the `results/` directory.
-
-## Project Structure
-
-```
-.
-├── data/
-│   └── dummy.wav
-├── results/
-├── scripts/
-│   └── run_whisper_server.sh
-├── src/
-│   ├── __init__.py
-│   ├── main.py
-│   └── models.py
-├── .gitignore
-├── pyproject.toml
-└── README.md
+```bash
+# install python dependencies
+uv sync
 ```
 
-*   `data/`: Contains the input audio files for evaluation.
-*   `results/`: Stores the transcription results from the STT models.
-*   `scripts/`: Helper scripts, such as for running the `whisper.cpp` server.
-*   `src/`: The main source code for the project.
-    *   `main.py`: The main script that orchestrates the evaluation process.
-    *   `models.py`: Contains the logic for interacting with the different STT models.
-*   `pyproject.toml`: Python project configuration.
-*   `README.md`: This file.
+### 2. Download and preprocess the data
 
-## Contributing
+We use the [FLEURS dataset](https://huggingface.co/datasets/google/fleurs) for evaluation. The `download_dataset.py` script will download the necessary splits.
 
-Contributions are welcome! Please open an issue or submit a pull request.
+```bash
+uv run scripts/download_dataset.py
+```
+
+This will download the data to `data/fleurs`.
+
+Next, we need to preprocess the data to create the sped-up versions.
+
+```bash
+uv run scripts/preprocess_fleurs.py
+```
+
+This script takes the downloaded FLEURS splits from `data/fleurs` and creates a new version at `data/fleurs_preprocessed`. This new version contains multiple copies of each utterance, sped up by factors of 1.0, 1.5, 2.0, 2.5, and 3.0.
+
+### 3. Run the evaluation
+
+The `src/evaluate_fleurs.py` script runs the evaluation. It takes two main arguments: `--interface` and `--model-id`.
+
+The interface determines how to run the model:
+
+*   `whisper_transformers`: Uses the Hugging Face `transformers` library. This is the easiest way to run open-weight Whisper models.
+*   `whisper_cpp`: Uses a local `whisper.cpp` server. This is faster for CPU inference.
+*   `openai`: Uses the OpenAI API for closed-source models like `whisper-large-v3`.
+
+The `model-id` specifies the model to use, e.g., `openai/whisper-large-v3`.
+
+Here are some example commands:
+
+```bash
+# Evaluate Whisper large-v3 using the transformers library
+uv run src/evaluate_fleurs.py --interface whisper_transformers --model-id openai/whisper-large-v3
+
+# Evaluate Whisper medium using whisper.cpp
+# (make sure the whisper.cpp server is running first)
+uv run src/evaluate_fleurs.py --interface whisper_cpp --model-id large-v3
+
+# Evaluate OpenAI's API-based Whisper
+uv run src/evaluate_fleurs.py --interface openai --model-id whisper-1
+```
+
+The results will be saved as CSV files in the `results/` directory.
+
+## Caveats and Limitations
+
+*   **Speed-up method**: The audio is sped up using `torchaudio.sox_effects` with the `tempo` effect. This method preserves pitch, but may introduce artifacts that are not representative of natural fast speech.
+*   **Dataset**: I have only tested on the test set of FLEURS.
+*   **Languages**: The evaluation is currently run on English, Spanish, and Swedish.
+*   **Normalization**: The reference and hypothesis texts are normalized before calculating WER/CER. The normalization includes lowercasing, removing punctuation, and removing Kaldi non-words. This is a standard practice, but it can hide certain types of errors.

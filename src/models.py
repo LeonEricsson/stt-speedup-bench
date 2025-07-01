@@ -3,7 +3,9 @@ import requests
 import openai
 import subprocess
 from dotenv import load_dotenv
-from typing import List
+from typing import List, Iterator, Dict
+import soundfile as sf
+import tempfile
 
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
@@ -24,11 +26,14 @@ class WhisperCPP:
 
 
 class OpenAIAPI:
-    def __init__(self, model: str = "whisper-1", api_key: str | None = None):
-        self.model = model
+    def __init__(
+        self, model_id: str = "whisper-1", api_key: str | None = None, **kwargs
+    ):
+        self.model = model_id
         self.client = openai.OpenAI(
-            api_key=api_key or os.environ.get("LOCAL_OPENAI_API_KEY")
+            api_key=api_key or os.environ.get("LOCAL_OPENAI_API_KEY"),
         )
+        self.generate_kwargs = {}
 
     def transcribe(self, audio_path: str) -> str:
         with open(audio_path, "rb") as f:
@@ -37,6 +42,21 @@ class OpenAIAPI:
                 file=f,
             )
         return transcript.text
+
+    def pipe(self, dataset_iterator, **kwargs) -> Iterator[Dict[str, str]]:
+        for item in dataset_iterator:
+            # item is a dict like {'array': np.array(...), 'sampling_rate': 16000}
+            audio_array = item["array"]
+            sampling_rate = item["sampling_rate"]
+
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmpfile:
+                sf.write(tmpfile.name, audio_array, sampling_rate)
+                try:
+                    text = self.transcribe(tmpfile.name)
+                    yield {"text": text}
+                except Exception as e:
+                    print(f"Error transcribing file: {e}")
+                    raise e
 
 
 class TransformersWhisper:

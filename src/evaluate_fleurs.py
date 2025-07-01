@@ -19,7 +19,7 @@ MODEL_REGISTRY = {
     "openai": OpenAIAPI,
 }
 
-DATA_DIR = Path("data/fleurs_preprocessed")
+DATA_DIR = Path("data/fleurs_preprocessed_fine")
 RESULTS_DIR = Path("results")
 LANGUAGES = ["en_us", "es_419", "sv_se"]
 BATCH_SIZE = 64
@@ -72,8 +72,10 @@ def load_dataset(lang: str):
     return ds.cast_column("audio", Audio(sampling_rate=16_000))
 
 
-def evaluate_lang(lang: str, model, writer: csv.DictWriter) -> None:
+def evaluate_lang(lang: str, model, writer: csv.DictWriter, limit: int | None) -> None:
     ds = load_dataset(lang)
+    if limit:
+        ds = ds.select(range(limit))
 
     # wrap the HF dataset so pipeline can consume its "audio" column directly
     kd = KeyDataset(ds, "audio")
@@ -129,6 +131,12 @@ def main():
         default=None,
         help="Underlying model identifier (e.g. openai/whisper-large-v3-turbo)",
     )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Limit the number of samples per language to this amount.",
+    )
     args = parser.parse_args()
 
     RESULTS_DIR.mkdir(exist_ok=True)
@@ -155,7 +163,7 @@ def main():
             if not (DATA_DIR / lang).exists():
                 print(f"[skip] {lang}: {DATA_DIR / lang} not found")
                 continue
-            evaluate_lang(lang, model, writer)
+            evaluate_lang(lang, model, writer, args.limit)
 
     print(f"✅ Results written to {out_file}")
 
