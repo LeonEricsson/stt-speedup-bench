@@ -21,11 +21,15 @@ An overview of the results is presented in the figure below.
 ---
 
 The detailed results are given in tables below.
-<p align="center">
-  <img src="/results/assets/whisper-large-v3-turbo-table.png" width="30%">
-  <img src="/results/assets/whisper-medium-table.png" width="30%">
-  <img src="/results/assets/whisper-small-table.png" width="30%">
-</p>
+<div style="text-align: center;">
+  <!-- First row: two images side-by-side -->
+  <img src="/results/assets/whisper-large-v3-turbo-table.png" width="45%" style="margin: 10px;">
+  <img src="/results/assets/whisper-medium-table.png" width="45%" style="margin: 10px;">
+  
+  <!-- Second row: one centered image -->
+  <img src="/results/assets/whisper-small-table.png" width="45%" style="margin: 10px;">
+</div>
+
 
 Following this we conduct further experiments with a finer speedup factors around 1.0 - 1.6. 
 
