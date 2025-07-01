@@ -11,7 +11,7 @@ Run with:   uv run preprocess_fleurs.py
 
 from pathlib import Path
 import random
-from typing import List, Dict, Any
+from typing import Dict, Any
 
 import torch
 import torchaudio
@@ -23,7 +23,6 @@ IN_DIR = Path("data/fleurs")  # original test splits
 OUT_DIR = Path("data/fleurs_preprocessed")  # final destination
 LANGS = ["en_us", "es_419", "sv_se"]  # language IDs
 MAX_SECONDS = 25.0  # duration ceiling
-KEEP_N = 100  # max clips per language
 SPEEDUPS = [1.0, 1.5, 2.0, 2.5, 3.0]  # tempo factors
 SEED = 42  # reproducibility
 NUM_PROC = 4  # parallel workers
@@ -92,12 +91,7 @@ def preprocess_lang(lang: str) -> None:
     )
     print(f"  kept {len(ds)} after duration filter")
 
-    # 3. random sample ≤100 (deterministic shuffle)
-    ds = ds.shuffle(seed=SEED)
-    ds = ds.select(range(min(KEEP_N, len(ds))))
-    print(f"  sampled {len(ds)} examples")
-
-    # 4. duplicate with speedups
+    # 3. duplicate with speedups
     ds = ds.map(
         tempo_batch,  # returns *3×* rows per input
         batched=True,  # allows list outputs per field
@@ -109,7 +103,7 @@ def preprocess_lang(lang: str) -> None:
     )
     print(f"  after duplication: {len(ds)} rows")
 
-    # 5. save
+    # 4. save
     out_path = OUT_DIR / lang
     out_path.parent.mkdir(parents=True, exist_ok=True)
     ds.save_to_disk(str(out_path))

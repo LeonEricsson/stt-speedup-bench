@@ -2,7 +2,6 @@ import os
 import requests
 import openai
 import subprocess
-from abc import ABC, abstractmethod
 from dotenv import load_dotenv
 from typing import List
 
@@ -11,7 +10,8 @@ from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 
 load_dotenv()
 
-class WhisperCPP():
+
+class WhisperCPP:
     def __init__(self, host: str = "127.0.0.1", port: int = 8080):
         self.url = f"http://{host}:{port}/inference"
 
@@ -23,7 +23,7 @@ class WhisperCPP():
             return response.json()["text"]
 
 
-class OpenAIAPI():
+class OpenAIAPI:
     def __init__(self, model: str = "whisper-1", api_key: str | None = None):
         self.model = model
         self.client = openai.OpenAI(
@@ -39,17 +39,15 @@ class OpenAIAPI():
         return transcript.text
 
 
-class TransformersWhisper():
+class TransformersWhisper:
     def __init__(
         self,
         model_id: str = "openai/whisper-large-v3-turbo",
-        device: str = None,
-        chunk_length_s: float = 30,
-        batch_size: int = None,
+        batch_size: int = 16,
         generate_kwargs: dict = None,
     ):
         # device & dtype
-        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.torch_dtype = torch.float16 if "cuda" in self.device else torch.float32
 
         # load model & processor
@@ -70,10 +68,6 @@ class TransformersWhisper():
             "torch_dtype": self.torch_dtype,
             "device": 0 if "cuda" in self.device else -1,
         }
-        if chunk_length_s is not None:
-            pipe_kwargs["chunk_length_s"] = chunk_length_s
-        if batch_size is not None:
-            pipe_kwargs["batch_size"] = batch_size
 
         self.pipe = pipeline("automatic-speech-recognition", **pipe_kwargs)
 
