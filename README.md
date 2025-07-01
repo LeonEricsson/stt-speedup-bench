@@ -1,12 +1,15 @@
 # Does audio speedup affect speech recognition?
+*yes, obviously. but to what extent?*
 
-This study rigorously examines how audio speedup affects the performance of state-of-the-art speech-to-text (STT) models. By benchmarking leading models such as OpenAI's Whisper and GPT-4o on audio data accelerated at varying factors, we quantify model robustness and delineate practical performance boundaries for high-speed transcription tasks.
+Over the weekend I stumbled upon a post on x that lead me to this article: [*OpenAI Charges by the Minute, So Make the Minutes Shorter*](https://george.mand.is/2025/06/openai-charges-by-the-minute-so-make-the-minutes-shorter/) which shows how speeding up a youtube audio before transcription leads lower api costs with minimal performance degradation. Naturally I thought this sounded too good to be true, free lunch? The author was clear in saying that he had not benchmarked this claim, and that it was mostly passed on a few samples passing the eye test, so what follows is a more rigorous evaluation of this possibility.
 
-Leveraging the FLEURS dataset as a controlled evaluation benchmark, the analysis systematically measures transcription accuracy degradation using standard metrics—primarily Word Error Rate (WER).
+Here, we assess how audio speedup affects the performance of state-of-the-art speech-to-text models. By benchmarking top-tier models like OpenAI's Whisper and GPT-4o against audio accelerated by various speed factors, we aim to measure model robustness and define practical performance limits for high-speed transcription tasks.
+
+Leveraging the FLEURS dataset as a controlled evaluation benchmark, the analysis systematically measures transcription accuracy degradation using standard metrics—primarily macroWord Error Rate (WER).
 
 ### TL;DR
 
-Transcription accuracy exhibits exponential degradation under increasing speed up, with performance blowing up quickly as you go beyond 1.5x. 
+Unfortunately, the results show that transcription accuracy doesn't degrade gracefully. Instead, it deteriorates exponentially with increased speed, especially beyond 1.5x, where performance quickly falls off a cliff.
 
 <p align="center">
   <img src="results/assets/tldr.png" alt="Error Rate vs Speedup" width="70%">
@@ -119,7 +122,7 @@ uv run src/evaluate_fleurs.py --interface openai --model-id whisper-1
 
 The results will be saved as CSV files in the `results/` directory.
 
-## Caveats and Limitations
+## Caveats
 
 *   **Speed-up method**: The audio is sped up using `torchaudio.sox_effects` with the `tempo` effect. This method preserves pitch, but may introduce artifacts that are not representative of natural fast speech.
 *   **Dataset**: I have only tested on the test set of FLEURS.
