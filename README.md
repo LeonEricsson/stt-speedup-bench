@@ -24,7 +24,7 @@ An overview of the results is presented in the figure below.
 
 The detailed results are given in tables below.
 <p align="center">
-  <img src="/results/assets/whisper-large-v3-turbo.png" width="35%">
+  <img src="/results/assets/whisper-large-v3-turbo.png" width="23%">
   <img src="/results/assets/whisper-medium.png" width="23%">
   <img src="/results/assets/whisper-small.png" width="23%">
   <img src="/results/assets/gpt-4o-transcribe.png" width="23%">
