@@ -22,7 +22,7 @@ DATA_FILES = {
     "Whisper Large-v3 Turbo": "results/whisper-large-v3-turbo-fine.csv",
     "Whisper Medium": "results/whisper-medium-fine.csv",
     "Whisper Small": "results/whisper-small-fine.csv",
-    # "GPT-4o Transcribe": "results/gpt-4o-transcribe-fine.csv",
+    "GPT-4o Transcribe": "results/gpt-4o-transcribe-fine.csv",
 }
 
 # colour-blind-friendly palette → one colour per model
@@ -30,7 +30,7 @@ MODEL_COLOURS = {
     "Whisper Large-v3 Turbo": "#66C2A5",  # teal
     "Whisper Medium": "#FC8D62",  # salmon
     "Whisper Small": "#8DA0CB",  # lavender
-    # "GPT-4o Transcribe": "#CC79A7",  # lavender
+    "GPT-4o Transcribe": "#CC79A7",  # lavender
 }
 METRIC_STYLE = {"wer_macro": "solid", "cer_macro": "dashed"}
 
@@ -81,7 +81,7 @@ leg_metrics = ax.legend(
     title="Metric",
     frameon=False,
     loc="upper left",
-    bbox_to_anchor=(0.11, 0.78),  # adjust y until it looks right
+    bbox_to_anchor=(0.11, 0.75),  # adjust y until it looks right
     borderpad=0.2,
 )
 

@@ -1,37 +1,45 @@
 # Does audio speedup affect speech recognition?
 
-This project contains code for running experiments on the robustness of (popular) speech-recognition models to sped-up audio. 
+This study rigorously examines how audio speedup affects the performance of state-of-the-art speech-to-text (STT) models. By benchmarking leading models such as OpenAI's Whisper and GPT-4o on audio data accelerated at varying factors, we quantify model robustness and delineate practical performance boundaries for high-speed transcription tasks.
 
-The core idea is to take a standard speech-to-text (STT) evaluation set, create copies of it at various speed factors, and then measure the degradation in transcription accuracy (WER/CER).
+Leveraging the FLEURS dataset as a controlled evaluation benchmark, the analysis systematically measures transcription accuracy degradation using standard metrics—primarily Word Error Rate (WER).
 
-## Experiment
+### TL;DR
 
-
-### Initial experiments
-Initial experiments were conducted on the Whisper model family. The FLEURS dataset was chosen for evaluation, specifically the test sets in English, Spanish, and Swedish to assess robustness across a small variety of languages. The evaluation metrics used were Word Error Rate (WER) and Character Error Rate (CER), calculated using [jiwer](https://github.com/jitsi/jiwer). The tested speedup factors were: 1.0, 1.5, 2.0, 2.5, and 3.0.
-
-An overview of the results is presented in the figure below.
+Transcription accuracy exhibits exponential degradation under increasing speed up, with performance blowing up quickly as you go beyond 1.5x. 
 
 <p align="center">
-  <img src="/results/assets/error_rate_speedup-1.png" alt="Error Rate vs Speedup" width="65%">
+  <img src="results/assets/tldr.png" alt="Error Rate vs Speedup" width="64%">
 </p>
 
 <p align="center">
-  <em>The error rate across three languages in the FLEURS test set, at increasing speedup factors. Error rates are averaged across language.</em>
+  <em>The word error rate across three languages in the FLEURS test set, at increasing speedup factors. Error rates are averaged across language.</em>
+</p>
+
+## Experiment
+
+### Coarse
+Experiments targeted the Whisper-model family (small, medium, and large-v3-turbo) and GPT-4o Transcribe, using the multilingual FLEURS test sets (English, Spanish, and Swedish). Transcription accuracy was assessed using Word Error Rate (WER) and Character Error Rate (CER), computed via [jiwer](https://github.com/jitsi/jiwer). Tested speedup factors included: 1.0, 1.5, 2.0, 2.5, and 3.0.
+
+Results summary:
+
+<p align="center">
+  <img src="results/assets/error_rate_speedup-1.png" alt="Error Rate vs Speedup" width="65%">
 </p>
 
 ---
 
-The detailed results are given in tables below.
+Detailed per-model results:
 <p align="center">
-  <img src="/results/assets/whisper-large-v3-turbo.png" width="23%">
-  <img src="/results/assets/whisper-medium.png" width="23%">
-  <img src="/results/assets/whisper-small.png" width="23%">
-  <img src="/results/assets/gpt-4o-transcribe.png" width="23%">
+  <img src="results/assets/whisper-large-v3-turbo.png" width="23%">
+  <img src="results/assets/whisper-medium.png" width="23%">
+  <img src="results/assets/whisper-small.png" width="23%">
+  <img src="results/assets/gpt-4o-transcribe.png" width="23%">
 </p>
 
 ### Finer resolution
-Given the exponential nature of the error rate I conduct more fine grained experiments around speedup factors 1.0 - 1.6. Otherwise the experiment is held the same (FLEURS test set, evaluation metrics, languages, ...).
+Given the observed exponential increase in WER beyond a specific threshold, further evaluations were conducted with finer granularity between 1.0 and 1.6 speedup factors. Conditions and evaluation protocols remained consistent with initial tests.
+
 
 <p align="center">
   <img src="/results/assets/error_rate_speedup-fine.png" alt="Error Rate vs Speedup" width="65%">
@@ -39,13 +47,20 @@ Given the exponential nature of the error rate I conduct more fine grained exper
 
 ---
 
-The detailed results are given in tables below.
+Detailed per-model results:
 <p align="center">
-  <img src="/results/assets/whisper-large-v3-turbo-fine.png" width="30%">
-  <img src="/results/assets/whisper-medium-fine.png" width="30%">
-  <img src="/results/assets/whisper-small-fine.png" width="30%">
+  <img src="results/assets/whisper-large-v3-turbo-fine.png" width="23%">
+  <img src="results/assets/whisper-medium-fine.png" width="23%">
+  <img src="results/assets/whisper-small-fine.png" width="23%">
+  <img src="results/assets/gpt-4o-transcribe-fine.png" width="23%">
 </p>
 
+Performance degradation exhibits clear exponential characteristics. Models experience a pronounced "accuracy cliff" around the 1.2x–1.3x speedup region. This behavior implies a critical acoustic distortion threshold, beyond which models fail to maintain effective feature extraction and recognition performance.
+
+### words per minute 
+
+Currently, the study uniformly applies speedup factors to audio samples, without explicitly controlling or measuring Words per Minute (WPM). However, speaker-dependent variability in baseline WPM could significantly influence model robustness to speed-induced artifacts. I'm considering
+decoupling speed-up factors from samples and instead plotting performance against raw WPM. 
 
 ## Recreating the results
 
