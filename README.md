@@ -16,6 +16,8 @@ Results compiled into a single figure. Performance degradation is exponential, a
   <em>The word error rate across three languages in the FLEURS test set, at increasing speedup factors. Error rates are averaged across language.</em>
 </p>
 
+tip: remove silences. that's the real 0 performance loss trick.
+
 ## Experiment
 
 ### Coarse
