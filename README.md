@@ -37,8 +37,6 @@ Detailed per-model results:
   <img src="results/assets/gpt-4o-transcribe.png" width="23%">
 </p>
 
-Performance degradation exhibits exponential characteristics. 
-
 ### Finer resolution
 It's glaringly evident that larger speedup factors are a no-go when measuring word for word transcription accuracy, however there may be a trade-off worth considering at the 1.0 - 1.5 range, so let's take a closer look at that. Conditions and evaluation protocols remained consistent with coarse tests.
 
@@ -54,8 +52,6 @@ Detailed per-model results:
   <img src="results/assets/whisper-small-fine.png" width="23%">
   <img src="results/assets/gpt-4o-transcribe-fine.png" width="23%">
 </p>
-
-[COMMENT]
 
 ### words per minute 
 
