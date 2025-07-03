@@ -1,4 +1,4 @@
-# Cheaper transcriptions, but at what cost?
+# Cheaper Transcriptions, Pricer Errors
 
 Last weekend I stumbled across a post on X that pointed to George Mandis’ write-up, [**“OpenAI Charges by the Minute, So Make the Minutes Shorter.”**](https://george.mand.is/2025/06/openai-charges-by-the-minute-so-make-the-minutes-shorter/) In it, George doubles the playback speed of a YouTube clip, feeds the audio to a speech-to-text model, and still gets a passable transcript—good enough for an LLM to crank out a coherent summary. He openly admits the test isn’t rigorous and that he cares more about summary fidelity than word-for-word accuracy. But it was enough to peak my interest; naturally, it sounded too good to be true. I figured that in George's case, the language model was able to conjure up a decent-looking summary even if the transcription was poor. Still, even a minor speedup could lead to significant savings in inference costs, so I decided to run a more disciplined experiment. Also, it gave me an opportunity to try out gemini-cli. 
 
