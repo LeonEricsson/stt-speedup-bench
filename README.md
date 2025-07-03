@@ -1,15 +1,14 @@
-# Does audio speedup affect speech recognition?
-*yes, obviously. but to what extent?*
+# Does audio speedup impair speech recognition?
+*yes, obviously. but to what extent and at what cost?*
 
-Over the weekend I stumbled upon a post on x that lead me to this article: [*OpenAI Charges by the Minute, So Make the Minutes Shorter*](https://george.mand.is/2025/06/openai-charges-by-the-minute-so-make-the-minutes-shorter/) which shows how speeding up a youtube audio before transcription leads lower api costs with minimal performance degradation. Naturally I thought this sounded too good to be true, free lunch? The author was clear in saying that he had not benchmarked this claim, and that it was mostly passed on a few samples passing the eye test, so what follows is a more rigorous evaluation of this possibility.
+Last weekend I stumbled across a post on X that pointed to George Mandis’ write-up, [**“OpenAI Charges by the Minute, So Make the Minutes Shorter.”**](https://george.mand.is/2025/06/openai-charges-by-the-minute-so-make-the-minutes-shorter/) In it, George doubles the playback speed of a YouTube clip, feeds the audio to a speech-to-text model, and still gets a passable transcript—good enough for an LLM to crank out a coherent summary. He openly admits the test isn’t rigorous and that he cares more about summary fidelity than word-for-word accuracy. But, it was enough to peak my interest; naturally, it sounded too good to be true. I figured the language model was able to conjure up a decent looking summary even if the transcription was ass, but even a minor speedup factor could mean a lot of saving in inference costs, so I decided to run a more disciplined experiment. Also, it gave me an opportunity to try out gemini-cli. 
 
-Here, we assess how audio speedup affects the performance of state-of-the-art speech-to-text models. By benchmarking top-tier models like OpenAI's Whisper and GPT-4o against audio accelerated by various speed factors, we aim to measure model robustness and define practical performance limits for high-speed transcription tasks.
+I’m benchmarking state-of-the-art speech-to-text models—OpenAI Whisper, GPT-4o, and a couple more—on tempo-scaled inputs drawn from the multilingual FLEURS corpus. Playback rates step from 1.0× (baseline) all the way up to 3.0×. For each setting I compute macro+micro, Word Error Rate (WER) + Character Error Rate (CER) and watch how fast they drift north. The goal is to map the degradation curve, is there a worthwhile trade-off here?
 
-Leveraging the FLEURS dataset as a controlled evaluation benchmark, the analysis systematically measures transcription accuracy degradation using standard metrics—primarily macroWord Error Rate (WER).
 
 ### TL;DR
 
-Unfortunately, the results show that transcription accuracy doesn't degrade gracefully. Instead, it deteriorates exponentially with increased speed, especially beyond 1.5x, where performance quickly falls off a cliff.
+Results compiled into a single figure. Performance degradation is exponential, at 2× playback most models are already 3–5× worse; push to 2.5× and accuracy falls off a cliff, with 20× degradation not uncommon. There are still sweet spots, though: Whisper-large-turbo only drifts from 5.39 % to 6.92 % WER (≈ 28 % relative hit) at 1.5×, and GPT-4o tolerates 1.2 × with a trivial ~3 % penalty.
 
 <p align="center">
   <img src="results/assets/tldr.png" alt="Error Rate vs Speedup" width="70%">
@@ -30,8 +29,6 @@ Results summary:
   <img src="results/assets/error_rate_speedup-1.png" alt="Error Rate vs Speedup" width="71%">
 </p>
 
----
-
 Detailed per-model results:
 <p align="center">
   <img src="results/assets/whisper-large-v3-turbo.png" width="23%">
@@ -40,15 +37,15 @@ Detailed per-model results:
   <img src="results/assets/gpt-4o-transcribe.png" width="23%">
 </p>
 
+Performance degradation exhibits exponential characteristics. 
+
 ### Finer resolution
-Given the observed exponential increase in WER beyond a specific threshold, further evaluations were conducted with finer granularity between 1.0 and 1.6 speedup factors. Conditions and evaluation protocols remained consistent with initial tests.
+It's glaringly evident that larger speedup factors are a no-go when measuring word for word transcription accuracy, however there may be a trade-off worth considering at the 1.0 - 1.5 range, so let's take a closer look at that. Conditions and evaluation protocols remained consistent with coarse tests.
 
 
 <p align="center">
-  <img src="/results/assets/error_rate_speedup-fine.png" alt="Error Rate vs Speedup" width="65%">
+  <img src="results/assets/error_rate_speedup-fine.png" alt="Error Rate vs Speedup" width="65%">
 </p>
-
----
 
 Detailed per-model results:
 <p align="center">
@@ -58,7 +55,7 @@ Detailed per-model results:
   <img src="results/assets/gpt-4o-transcribe-fine.png" width="23%">
 </p>
 
-Performance degradation exhibits clear exponential characteristics. Models experience a pronounced "accuracy cliff" around the 1.2x–1.3x speedup region. This behavior implies a critical acoustic distortion threshold, beyond which models fail to maintain effective feature extraction and recognition performance.
+[COMMENT]
 
 ### words per minute 
 
