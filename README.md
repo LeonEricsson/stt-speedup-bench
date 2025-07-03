@@ -1,5 +1,4 @@
-# Does audio speedup impair speech recognition?
-*yes, obviously. but to what extent and at what cost?*
+# Cheaper transcriptions, but at what cost?
 
 Last weekend I stumbled across a post on X that pointed to George Mandis’ write-up, [**“OpenAI Charges by the Minute, So Make the Minutes Shorter.”**](https://george.mand.is/2025/06/openai-charges-by-the-minute-so-make-the-minutes-shorter/) In it, George doubles the playback speed of a YouTube clip, feeds the audio to a speech-to-text model, and still gets a passable transcript—good enough for an LLM to crank out a coherent summary. He openly admits the test isn’t rigorous and that he cares more about summary fidelity than word-for-word accuracy. But, it was enough to peak my interest; naturally, it sounded too good to be true. I figured the language model was able to conjure up a decent looking summary even if the transcription was ass, but even a minor speedup factor could mean a lot of saving in inference costs, so I decided to run a more disciplined experiment. Also, it gave me an opportunity to try out gemini-cli. 
 
